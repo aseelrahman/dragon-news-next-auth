@@ -1,8 +1,10 @@
 "use client";
 import { authClient } from "@/lib/auth-client";
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
 import { useForm, Watch } from "react-hook-form";
+import { FaEye } from "react-icons/fa";
+import { IoIosEyeOff } from "react-icons/io";
 
 const RegisterPage = () => {
   const {
@@ -11,6 +13,7 @@ const RegisterPage = () => {
     watch,
     formState: { errors },
   } = useForm();
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleRegisterFunc = async (data) => {
     const { email, name, photoUrl, password } = data;
@@ -25,13 +28,12 @@ const RegisterPage = () => {
     });
 
     console.log(res, error);
-    if(error){
-      alert(error.message)
+    if (error) {
+      alert(error.message);
     }
-    if(res){
-      alert("Signup successful")
+    if (res) {
+      alert("Signup successful");
     }
-    
   };
 
   return (
@@ -90,16 +92,22 @@ const RegisterPage = () => {
           </fieldset>
 
           {/* Password */}
-          <fieldset className="fieldset">
+          <fieldset className="fieldset relative">
             <legend className="fieldset-legend">Password</legend>
             <input
-              type="password"
+              type={showPassword ? "text" : "password"}
               {...register("password", {
                 required: "Password field is required",
               })}
               className="input"
               placeholder="Enter your password"
             />
+            <span
+              className="absolute right-7 top-4 cursor-pointer"
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? <IoIosEyeOff /> : <FaEye />}
+            </span>
             {errors.password && (
               <p className="text-red-500">{errors.password.message}</p>
             )}
